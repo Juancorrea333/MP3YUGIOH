@@ -44,3 +44,36 @@ public class VentanaDuelo extends JFrame {
     public void setControlador(Controlador controlador) {
         this.controlador = controlador;
     }
+        public void actualizarVista(MotorJuego motor) {
+        Jugador activo   = motor.getActivo();
+        Jugador oponente = motor.getOponente();
+
+        lblTurno.setText("Turno: " + motor.getNumeroTurno());
+        lblJugadorActivo.setText("Turno de: " + activo.getNombre());
+        lblLpPropio.setText("Tus LP: " + activo.getLp());
+        lblLpRival.setText("LP Rival (" + oponente.getNombre() + "): " + oponente.getLp());
+        lblMazoPropio.setText("Tu mazo: " + activo.getMazo().size() + " cartas");
+        lblMazoRival.setText("Mazo rival: " + oponente.getMazo().size() + " cartas");
+
+        modeloCampoRival.clear();
+        for (Monstruo m : oponente.getCampo()) {
+            modeloCampoRival.addElement(m.getNombre()
+                    + " | ATK:" + m.getAtk()
+                    + " DEF:" + m.getDef()
+                    + " | " + m.getPosicion());
+        }
+        if (oponente.tieneTrampas()) {
+            modeloCampoRival.addElement("[ " + oponente.getTrampas().size() + " trampa(s) boca abajo ]");
+        }
+
+        modeloCampoPropio.clear();
+        for (Monstruo m : activo.getCampo()) {
+            String puedeAtacar = m.puedeAtacar() ? " ⚔" : "";
+            modeloCampoPropio.addElement(m.getNombre()
+                    + " | ATK:" + m.getAtk()
+                    + " DEF:" + m.getDef()
+                    + " | " + m.getPosicion() + puedeAtacar);
+        }
+        if (activo.tieneTrampas()) {
+            modeloCampoPropio.addElement("[ " + activo.getTrampas().size() + " trampa(s) boca abajo ]");
+        }
