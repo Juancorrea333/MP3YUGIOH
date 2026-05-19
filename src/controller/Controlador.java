@@ -58,3 +58,31 @@ public class Controlador {
 
         ventanaInicio.dispose();
     }
+
+    public void accionJugarCarta() {
+        int indiceCarta = ventanaDuelo.getIndiceCartaSeleccionada();
+
+        if (indiceCarta < 0) {
+            ventanaDuelo.mostrarAviso("Selecciona una carta de tu mano.");
+            return;
+        }
+        if (motor.yaJugoUnaCarta()) {
+            ventanaDuelo.mostrarAviso("Ya jugaste una carta este turno.");
+            return;
+        }
+
+        Carta carta = motor.getActivo().getMano().get(indiceCarta);
+
+        if (carta.esMonstruo()) {
+            accionJugarMonstruo(indiceCarta, carta.comoMonstruo());
+        } else {
+
+            String error = motor.jugarCarta(indiceCarta, Posicion.ATAQUE, -1);
+            if (error != null) {
+                ventanaDuelo.mostrarError(error);
+            }
+        }
+
+        ventanaDuelo.actualizarVista(motor);
+        verificarFin();
+    }
