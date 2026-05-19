@@ -20,8 +20,10 @@ public class Controlador {
         this.ventanaInicio = ventanaInicio;
 
         this.ventanaInicio.setControlador(this);
-    } 
-        public void accionIniciarDuelo() {
+    }
+
+
+    public void accionIniciarDuelo() {
         String nombre1 = ventanaInicio.getNombreJugador1();
         String nombre2 = ventanaInicio.getNombreJugador2();
 
@@ -76,7 +78,6 @@ public class Controlador {
         if (carta.esMonstruo()) {
             accionJugarMonstruo(indiceCarta, carta.comoMonstruo());
         } else {
-
             String error = motor.jugarCarta(indiceCarta, Posicion.ATAQUE, -1);
             if (error != null) {
                 ventanaDuelo.mostrarError(error);
@@ -86,7 +87,8 @@ public class Controlador {
         ventanaDuelo.actualizarVista(motor);
         verificarFin();
     }
-       private void accionJugarMonstruo(int indiceCarta, Monstruo monstruo) {
+
+    private void accionJugarMonstruo(int indiceCarta, Monstruo monstruo) {
         int indiceSacrificio  = -1;
         int indiceSacrificio2 = -1;
 
@@ -143,7 +145,8 @@ public class Controlador {
             ventanaDuelo.mostrarError(error);
         }
     }
-        public void accionAtacar() {
+
+    public void accionAtacar() {
         if (motor.esPrimerTurno()) {
             ventanaDuelo.mostrarAviso("No se puede atacar en el primer turno.");
             return;
@@ -211,3 +214,12 @@ public class Controlador {
                     motor.getActivo().getNombre());
         }
     }
+
+    private void verificarFin() {
+        if (motor.isJuegoTerminado()) {
+            VentanaFin ventanaFin = new VentanaFin(motor.getGanador().getNombre());
+            ventanaFin.setVisible(true);
+            ventanaDuelo.dispose();
+        }
+    }
+}
