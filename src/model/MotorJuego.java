@@ -44,9 +44,7 @@ public class MotorJuego {
     public boolean  isJuegoTerminado() { return juegoTerminado; }
     public Jugador  getGanador()       { return ganador; }
     public boolean esPrimerTurno() {
-        // El primer turno del jugador que abre es el turno 1.
-        // El primer turno del segundo jugador es el turno 2.
-        // En ambos casos no se puede atacar.
+        
         return numeroTurno <= 2 && (
             (activo == primerJugador && numeroTurno == 1) ||
             (activo != primerJugador && numeroTurno == 2)
