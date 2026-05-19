@@ -77,3 +77,58 @@ public class VentanaDuelo extends JFrame {
         if (activo.tieneTrampas()) {
             modeloCampoPropio.addElement("[ " + activo.getTrampas().size() + " trampa(s) boca abajo ]");
         }
+       modeloMano.clear();
+        for (Carta c : activo.getMano()) {
+            if (c.esMonstruo()) {
+                Monstruo m = c.comoMonstruo();
+                modeloMano.addElement("[MONSTRUO] " + m.getNombre()
+                        + " ATK:" + m.getAtk()
+                        + " DEF:" + m.getDef()
+                        + " LVL:" + m.getNivel());
+            } else if (c instanceof Magica) {
+                modeloMano.addElement("[MAGICA] " + c.getNombre()
+                        + " - " + ((Magica) c).getDescripcion());
+            } else if (c instanceof Trampa) {
+                modeloMano.addElement("[TRAMPA] " + c.getNombre()
+                        + " - " + ((Trampa) c).getDescripcion());
+            }
+        }
+
+        txtLog.setText("");
+        for (String msg : motor.getLog()) {
+            txtLog.append(msg + "\n");
+        }
+        txtLog.setCaretPosition(txtLog.getDocument().getLength());
+
+        boolean juegoActivo = !motor.isJuegoTerminado();
+        btnJugarCarta.setEnabled(juegoActivo && !motor.yaJugoUnaCarta());
+        btnAtacar.setEnabled(juegoActivo && !motor.esPrimerTurno() && !motor.yaAtaco());
+        btnPasarTurno.setEnabled(juegoActivo);
+    }
+
+    public int getIndiceCartaSeleccionada() {
+        return lstMano.getSelectedIndex();
+    }
+
+    public void mostrarError(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje,
+                "Error", JOptionPane.WARNING_MESSAGE);
+    }
+
+    public void mostrarAviso(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje,
+                "Accion no permitida", JOptionPane.WARNING_MESSAGE);
+    }
+
+    public void mostrarCambioDeTurno(int numeroTurno, String nombreJugador) {
+        JOptionPane.showMessageDialog(this,
+                "Turno " + numeroTurno + " — Le toca a: " + nombreJugador,
+                "Cambio de turno", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void initComponentes() {
+        setLayout(new BorderLayout(5, 5));
+        add(crearPanelSuperior(), BorderLayout.NORTH);
+        add(crearPanelCentral(),  BorderLayout.CENTER);
+        add(crearPanelMano(),     BorderLayout.SOUTH);
+    }
