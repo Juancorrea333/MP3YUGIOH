@@ -143,3 +143,71 @@ public class Controlador {
             ventanaDuelo.mostrarError(error);
         }
     }
+        public void accionAtacar() {
+        if (motor.esPrimerTurno()) {
+            ventanaDuelo.mostrarAviso("No se puede atacar en el primer turno.");
+            return;
+        }
+        if (motor.yaAtaco()) {
+            ventanaDuelo.mostrarAviso("Ya atacaste este turno.");
+            return;
+        }
+
+        List<Monstruo> campoPropio = motor.getActivo().getCampo();
+        if (campoPropio.isEmpty()) {
+            ventanaDuelo.mostrarAviso("No tienes monstruos en campo.");
+            return;
+        }
+
+        String[] atacantes = new String[campoPropio.size()];
+        for (int i = 0; i < campoPropio.size(); i++) {
+            Monstruo m = campoPropio.get(i);
+            atacantes[i] = i + ": " + m.getNombre()
+                    + " ATK:" + m.getAtk() + " " + m.getPosicion();
+        }
+        String eleccionAtacante = (String) JOptionPane.showInputDialog(ventanaDuelo,
+                "Elige tu monstruo atacante:",
+                "Atacar", JOptionPane.PLAIN_MESSAGE, null, atacantes, atacantes[0]);
+        if (eleccionAtacante == null) return;
+        int indiceAtacante = Integer.parseInt(eleccionAtacante.split(":")[0]);
+
+        int indiceDefensor = -1;
+        List<Monstruo> campoRival = motor.getOponente().getCampo();
+
+        if (!campoRival.isEmpty()) {
+            String[] defensores = new String[campoRival.size()];
+            for (int i = 0; i < campoRival.size(); i++) {
+                Monstruo m = campoRival.get(i);
+                defensores[i] = i + ": " + m.getNombre()
+                        + " ATK:" + m.getAtk()
+                        + " DEF:" + m.getDef()
+                        + " " + m.getPosicion();
+            }
+            String eleccionDefensor = (String) JOptionPane.showInputDialog(ventanaDuelo,
+                    "Elige el monstruo rival a atacar:",
+                    "Seleccionar objetivo", JOptionPane.PLAIN_MESSAGE, null, defensores, defensores[0]);
+            if (eleccionDefensor == null) return;
+            indiceDefensor = Integer.parseInt(eleccionDefensor.split(":")[0]);
+        }
+
+        String error = motor.atacar(indiceAtacante, indiceDefensor);
+        if (error != null) {
+            ventanaDuelo.mostrarError(error);
+        }
+
+        ventanaDuelo.actualizarVista(motor);
+        verificarFin();
+    }
+
+    public void accionPasarTurno() {
+        motor.pasarTurno();
+        motor.iniciarTurno();
+        ventanaDuelo.actualizarVista(motor);
+        verificarFin();
+
+        if (!motor.isJuegoTerminado()) {
+            ventanaDuelo.mostrarCambioDeTurno(
+                    motor.getNumeroTurno(),
+                    motor.getActivo().getNombre());
+        }
+    }
