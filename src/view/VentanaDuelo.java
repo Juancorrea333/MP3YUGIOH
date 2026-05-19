@@ -185,3 +185,38 @@ public class VentanaDuelo extends JFrame {
 
         return panel;
     }
+        private JPanel crearPanelMano() {
+        JPanel panel = new JPanel(new BorderLayout(5, 5));
+        panel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
+
+        lstMano = new JList<>(modeloMano);
+        lstMano.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        lstMano.setVisibleRowCount(3);
+        JScrollPane scrollMano = new JScrollPane(lstMano);
+        scrollMano.setBorder(BorderFactory.createTitledBorder("Tu Mano"));
+
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 5));
+        btnJugarCarta = new JButton("Jugar Carta");
+        btnAtacar     = new JButton("Atacar");
+        btnPasarTurno = new JButton("Pasar Turno");
+
+        panelBotones.add(btnJugarCarta);
+        panelBotones.add(btnAtacar);
+        panelBotones.add(btnPasarTurno);
+
+        panel.add(scrollMano,   BorderLayout.CENTER);
+        panel.add(panelBotones, BorderLayout.SOUTH);
+
+        btnJugarCarta.addActionListener(e -> {
+            if (controlador != null) controlador.accionJugarCarta();
+        });
+        btnAtacar.addActionListener(e -> {
+            if (controlador != null) controlador.accionAtacar();
+        });
+        btnPasarTurno.addActionListener(e -> {
+            if (controlador != null) controlador.accionPasarTurno();
+        });
+
+        return panel;
+    }
+}
