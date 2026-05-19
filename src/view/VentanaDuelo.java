@@ -1,4 +1,4 @@
-ackage view;
+package view;
 
 import controller.Controlador;
 import model.*;
@@ -7,12 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-/**
- * Vista de la pantalla de duelo.
- * Solo muestra el estado del juego y notifica al Controlador
- * cuando el usuario pulsa un boton.
- * No contiene logica de juego ni llama directamente al MotorJuego.
- */
 public class VentanaDuelo extends JFrame {
 
     private JLabel lblTurno;
@@ -47,7 +41,6 @@ public class VentanaDuelo extends JFrame {
         initComponentes();
     }
 
-    // El Controlador se registra aqui despues de construir la vista
     public void setControlador(Controlador controlador) {
         this.controlador = controlador;
     }
